@@ -16,7 +16,7 @@ width_block = 110
 height_block = 80
 
 wall = Wall(width_screen - margin_line_left - margin_line_right, height_screen - margin_line_bottom)
-hole = Hole(600, 340, 300, 400)
+hole = Hole(600, 290, 300, 450)
 
 c = Canvas(width=width_screen, height=height_screen, bg='white')
 
@@ -58,20 +58,23 @@ used_blocks = []
 x = margin_line_left
 width_wall = width_screen - margin_line_left - margin_line_right
 
-while x < width_wall-width_block:
-    if hole.x < x + width_block < hole.x2:
-        used_blocks.append(Block(x, null_level-height_block, hole.x - x, height_block, width_block, height_block))
-        #used_blocks.append(Block(x, null_level - height_block, width_block, height_block, width_block, height_block))
-        x = hole.x2
+j = 1
+while j < 8:
+    while x < width_wall-width_block:
+        if hole.x < x + width_block < hole.x2 and hole.y < null_level-(height_block * (j - 1)):
+            used_blocks.append(Block(x, null_level-(height_block * j), hole.x - x, height_block, width_block, height_block))
+            x = hole.x2
 
-    used_blocks.append(Block(x, null_level-height_block, width_block, height_block, width_block, height_block))
-    x += width_block
+        used_blocks.append(Block(x, null_level-(height_block * j), width_block, height_block, width_block, height_block))
+        x += width_block
 
-last_block_x = used_blocks[-1].x2
-right_border_screen_x = width_screen - margin_line_right
-if last_block_x != right_border_screen_x:
-    used_blocks.append(Block(last_block_x, null_level-height_block, right_border_screen_x - last_block_x,
-                             height_block, width_block, height_block))
+    last_block_x = used_blocks[-1].x2
+    right_border_screen_x = width_screen - margin_line_right
+    if last_block_x != right_border_screen_x:
+        used_blocks.append(Block(last_block_x, null_level-(height_block * j), right_border_screen_x - last_block_x,
+                                 height_block, width_block, height_block))
+        j += 1
+        x = margin_line_left
 
 print(used_blocks[-1])
 
