@@ -12,7 +12,7 @@ margin_line_left = 10
 margin_line_right = 10
 null_level = height_screen - margin_line_bottom
 
-width_block = 110
+width_block = 150
 height_block = 80
 
 wall = Wall(width_screen - margin_line_left - margin_line_right, height_screen - margin_line_bottom)
@@ -36,11 +36,6 @@ def create_hole(hole_for_create):
     c.create_line(hole_for_create.x2, hole_for_create.y2, hole_for_create.x2, hole_for_create.y)
 
 
-# def check_overflowing(check_previous_row_blocks, current_x):
-#     for check_block in check_previous_row_blocks:
-#         if abs(check_block.x - current_x) < min_overflowing:
-#             return False
-#     return True
 
 def get_width_block_with_check_overflowing(check_previous_row_blocks, current_x):
     for check_block in check_previous_row_blocks:
@@ -62,12 +57,13 @@ used_blocks = []
 x = margin_line_left
 width_wall = width_screen - margin_line_left - margin_line_right
 
-start_overflowing = 30 # стартовая перевязка швов (с края отступаем на 30)
-min_overflowing = 25 # минимальное значение перевязки швов
+min_overflowing = 50 # минимальное значение перевязки швов
+start_overflowing = min_overflowing # стартовая перевязка швов (с края отступаем на 30)
 previous_row_blocks = [] # блоки предыдущего ряда
 
 j = 1 # задаем начальный ряд блоков
-while j < 10:
+while j < 10: # пока не закончатся все ряды
+
     if j != 1: # если не первый ряд
         previous_row_blocks = []
         last_block_y = used_blocks[-1].y
@@ -81,9 +77,6 @@ while j < 10:
             x = used_blocks[-1].x2
 
     while x < width_wall-width_block:
-        if len(used_blocks) == 75:
-            pass
-
         bottom_block = null_level-(height_block * (j - 1))
         if hole.x < x + width_block < hole.x2 and hole.y < bottom_block: # если блок не попадает на проем и низ блока ниже верха проема
             used_blocks.append(
@@ -132,7 +125,7 @@ print(used_blocks[-1])
 for block in used_blocks:
     c.create_rectangle(block.x, block.y, block.x2, block.y2)
     # Подпись для блока
-    if block.width > 20 and block.height > 15:
+    if block.width > 15 and block.height > 15:
         c.create_text(block.x + block.width / 2, block.y + block.height / 2,
                       text=f"{block.width}x{block.height}", font=("Arial", 7))
         # c.create_text(block.x + block.width / 2, block.y + block.height / 2,
